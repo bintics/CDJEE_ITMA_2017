@@ -1,0 +1,31 @@
+version: '2'
+services:
+  db:
+    image: "mysql:5.7.14"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: java_ee
+      MYSQL_USER: federico
+      MYSQL_PASSWORD: 123
+      MYSQL_ROOT_HOST: localhost
+    ports:
+      - 3306:3306
+    volumes:
+      - ./scripts/:/docker-entrypoint-initdb.d
+  web:
+    image: "tomcat:8"
+    restart: always
+    links:
+      - db
+    ports:
+      - 8080:8080
+    volumes:
+      - ./target/:/usr/local/tomcat/webapps/ROOT
+
+# colocar ruta de web app de tomcat
+# Ejecutar docker engine:
+# docker-compose up
+# docker-compose ps
+# docker-compose stop
+# docker-compose down --volumes
